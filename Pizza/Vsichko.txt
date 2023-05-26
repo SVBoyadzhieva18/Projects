@@ -1,0 +1,243 @@
+class Dough {
+    private String flourType;
+    private String bakingTechnique;
+    private int weightInGrams;
+
+    public Dough(String flourType, String bakingTechnique, int weightInGrams) {
+        this.flourType = flourType;
+        this.bakingTechnique = bakingTechnique;
+        this.weightInGrams = weightInGrams;
+    }
+
+    public String getFlourType() {
+        return flourType;
+    }
+
+    public void setFlourType(String flourType) {
+        this.flourType = flourType;
+    }
+
+    public String getBakingTechnique() {
+        return bakingTechnique;
+    }
+
+    public void setBakingTechnique(String bakingTechnique) {
+        this.bakingTechnique = bakingTechnique;
+    }
+
+    public int getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public void setWeightInGrams(int weightInGrams) {
+        this.weightInGrams = weightInGrams;
+    }
+
+    public void printInfo() {
+        System.out.println("Dough: ");
+        System.out.println(" - Flour type: " + flourType);
+        System.out.println(" - Baking technique: " + bakingTechnique);
+        System.out.println(" - Weight: " + weightInGrams + " grams");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+class PizzaApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] pizzaInfo = scanner.nextLine().split("\\s+");
+        String pizzaName = pizzaInfo[1];
+        int numberOfToppings = Integer.parseInt(pizzaInfo[2]);
+
+        Pizza pizza = new Pizza(pizzaName, numberOfToppings);
+
+        String[] doughInfo = scanner.nextLine().split("\\s+");
+        String flourType = doughInfo[1];
+        String bakingTechnique = doughInfo[2];
+        int doughWeight = Integer.parseInt(doughInfo[3]);
+
+        if (!Validations.isValidFlourType(flourType)) {
+            System.out.println("Invalid flour type!");
+            return;
+        }
+
+        if (!Validations.isValidDoughWeight(doughWeight)) {
+            System.out.println("Invalid dough weight!");
+            return;
+        }
+
+        Dough dough = new Dough(flourType, bakingTechnique, doughWeight);
+        pizza.setDough(dough);
+
+        for (int i = 0; i < numberOfToppings; i++) {
+            String[] toppingInfo = scanner.nextLine().split("\\s+");
+            String toppingType = toppingInfo[1];
+            int toppingWeight = Integer.parseInt(toppingInfo[2]);
+
+            if (!Validations.isValidToppingType(toppingType)) {
+                System.out.println("Invalid topping type!");
+                return;
+            }
+
+            Topping topping = new Topping(toppingType, toppingWeight);
+            pizza.addTopping(topping);
+        }
+
+        pizza.printInfo();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Pizza {
+    private String pizzaName;
+    private int numberOfToppings;
+    private Dough dough;
+    private List<Topping> toppings;
+
+    public Pizza(String pizzaName, int numberOfToppings) {
+        this.pizzaName = pizzaName;
+        this.numberOfToppings = numberOfToppings;
+        this.toppings = new ArrayList<>();
+    }
+
+    public String getPizzaName() {
+        return pizzaName;
+    }
+
+    public void setPizzaName(String pizzaName) {
+        this.pizzaName = pizzaName;
+    }
+
+    public int getNumberOfToppings() {
+        return numberOfToppings;
+    }
+
+    public void setNumberOfToppings(int numberOfToppings) {
+        this.numberOfToppings = numberOfToppings;
+    }
+
+    public Dough getDough() {
+        return dough;
+    }
+
+    public void setDough(Dough dough) {
+        this.dough = dough;
+    }
+
+    public List<Topping> getToppings() {
+        return toppings;
+    }
+
+    public void addTopping(Topping topping) {
+        this.toppings.add(topping);
+    }
+
+    public void printInfo() {
+        System.out.println("Pizza: " + pizzaName);
+        System.out.println("Number of toppings: " + numberOfToppings);
+        dough.printInfo();
+        System.out.println("Toppings:");
+        for (Topping topping : toppings) {
+            topping.printInfo();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+class Topping {
+    private String toppingType;
+    private int weightInGrams;
+
+    public Topping(String toppingType, int weightInGrams) {
+        this.toppingType = toppingType;
+        this.weightInGrams = weightInGrams;
+    }
+
+    public String getToppingType() {
+        return toppingType;
+    }
+
+    public void setToppingType(String toppingType) {
+        this.toppingType = toppingType;
+    }
+
+    public int getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public void setWeightInGrams(int weightInGrams) {
+        this.weightInGrams = weightInGrams;
+    }
+
+    public void printInfo() {
+        System.out.println("Topping: ");
+        System.out.println(" - Type: " + toppingType);
+        System.out.println(" - Weight: " + weightInGrams + " grams");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+class Validations {
+    public static boolean isValidFlourType(String flourType) {
+        return flourType.equals("white") || flourType.equals("wholegrain");
+    }
+
+    public static boolean isValidDoughWeight(int weightInGrams) {
+        return weightInGrams >= 1 && weightInGrams <= 200;
+    }
+
+    public static boolean isValidToppingType(String toppingType) {
+        String[] validToppings = {"meat", "vegetables", "cheese", "sauce"};
+        for (String validTopping : validToppings) {
+            if (validTopping.equals(toppingType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValidPizzaName(String pizzaName) {
+        return !pizzaName.isEmpty() && pizzaName.length() <= 15;
+    }
+
+    public static boolean isValidNumberOfToppings(int numberOfToppings) {
+        return numberOfToppings >= 1 && numberOfToppings <= 15;
+    }
+}

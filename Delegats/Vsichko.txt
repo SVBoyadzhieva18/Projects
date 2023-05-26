@@ -1,0 +1,405 @@
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Conference {
+    private List<Delegate> delegateList;
+    private List<Hotel> hotelList;
+    private List<DelegationCard> delegationCardList;
+
+    public Conference() {
+        this.delegateList = null;
+        this.hotelList = new ArrayList<Hotel>();
+        this.delegationCardList = new ArrayList<DelegationCard>();
+    }
+
+    public Conference(ArrayList<Delegate> delegates, ArrayList<Hotel> hotels, ArrayList<DelegationCard> delegationCards) {
+        this.delegateList = delegates;
+        this.hotelList = hotels;
+        this.delegationCardList = delegationCards;
+    }
+
+    public List<Delegate> getDelegateList() {
+        return delegateList;
+    }
+
+    public List<Hotel> getHotelList() {
+        return hotelList;
+    }
+
+    public List<DelegationCard> getDelegationCardList() {
+        return delegationCardList;
+    }
+
+    public void addDelegate(Delegate delegate, Hotel hotel, DelegationCard delegationCard) {
+        delegateList.add(delegate);
+        hotelList.add(hotel);
+        delegationCardList.add(delegationCard);
+    }
+
+    public void removeDelegate(Delegate delegate) {
+        int delegateIndex = delegateList.indexOf(delegate);
+        if (delegateIndex >= 0) {
+            delegateList.remove(delegateIndex);
+            hotelList.remove(delegateIndex);
+            delegationCardList.remove(delegateIndex);
+        }
+    }
+
+    public double calculateTotalCostForLocation(String location) {
+        double totalCost = 0;
+        for (int i = 0; i < delegateList.size(); i++) {
+            if (delegateList.get(i).getHometown().equals(location)) {
+                totalCost += hotelList.get(i).getRoomPrice();
+            }
+        }
+        return totalCost;
+    }
+
+    public double calculateTotalHotelExpenses(Hotel hotel, String city) {
+        double totalExpenses = 0;
+        for (int i = 0; i < hotelList.size(); i++) {
+            if (hotelList.get(i).getName().equals(hotel.getName()) && delegateList.get(i).getHometown().equals(city)) {
+                totalExpenses += hotelList.get(i).getRoomPrice();
+            }
+        }
+        return totalExpenses;
+    }
+
+    public Delegate getEarliestArrivalDelegateData() {
+        int earliestDelegateIndex = 0;
+        Date earliestArrival = delegationCardList.get(0).getArrivalDate();
+        for (int i = 0; i < delegationCardList.size(); i++) {
+            if (delegationCardList.get(i).getArrivalDate().before(earliestArrival)) {
+                earliestArrival = delegationCardList.get(i).getArrivalDate();
+                earliestDelegateIndex = i;
+            }
+        }
+        Delegate earliestDelegate = delegateList.get(earliestDelegateIndex);
+        Hotel earliestDelegateHotel = hotelList.get(earliestDelegateIndex);
+        System.out.println("Earliest arriving delegate: " + earliestDelegate.getName());
+        System.out.println("Hotel name: " + earliestDelegateHotel.getName());
+        System.out.println("Hotel room number: " + earliestDelegateHotel.getRoomNumber());
+        return earliestDelegate;
+    }
+
+    public List<Delegate> getDelegatesFromCity(String city) {
+        List<Delegate> cityDelegates = new ArrayList<>();
+        for (int i = 0; i < delegateList.size(); i++) {
+            if (delegateList.get(i).getHometown().equals(city)) {
+                cityDelegates.add(delegateList.get(i));
+            }
+        }
+        return cityDelegates;
+    }
+
+    public Delegate getDelegateDataByRoomNumber(int roomNumber) {
+        boolean isRoomOccupied = false;
+        for (int i = 0; i < hotelList.size(); i++) {
+            if (hotelList.get(i).getRoomNumber() == roomNumber) {
+                isRoomOccupied = true;
+                Delegate delegate = delegateList.get(i);
+                Hotel delegateHotel = hotelList.get(i);
+                DelegationCard delegateCard = delegationCardList.get(i);
+                System.out.println("Delegate name: " + delegate.getName());
+                System.out.println("EGN: " + delegate.getEGN());
+                System.out.println("City: " + delegate.getHometown());
+                System.out.println("Travel expenses: " + delegate.getTravelExpenses());
+                System.out.println("Hotel name: " + delegateHotel.getName());
+                System.out.println("Room number: " + delegateHotel.getRoomNumber());
+                System.out.println("Room price: " + delegateHotel.getRoomPrice());
+                System.out.println("Delegation card number: " + delegateCard);
+                System.out.println("Arrival date: " + delegateCard.getArrivalDate());
+                System.out.println("Departure date: " + delegateCard.getDepartureDate());
+                break;
+            }
+        }
+        if (!isRoomOccupied) {
+            System.out.println("The room is not occupied by any delegate.");
+        }
+        return null;
+    }
+}
+
+
+
+
+
+
+
+
+
+public class Delegate {
+    private String name;
+    private String EGN;
+    private String hometown;
+    private double travelExpenses;
+
+    public Delegate(){
+        this.name = "";
+        this.EGN = "";
+        this.hometown = "";
+        this.travelExpenses = 0.0;
+    }
+
+    public Delegate(String name, String EGN, String hometown, double travelExpenses) {
+        this.name = name;
+        this.EGN = EGN;
+        this.hometown = hometown;
+        this.travelExpenses = travelExpenses;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEGN() {
+        return EGN;
+    }
+
+    public void setEGN(String EGN) {
+        this.EGN = EGN;
+    }
+
+    public String getHometown() {
+        return hometown;
+    }
+
+    public void setHometown(String hometown) {
+        this.hometown = hometown;
+    }
+
+    public double getTravelExpenses() {
+        return travelExpenses;
+    }
+
+    public void setTravelExpenses(double travelExpenses) {
+        this.travelExpenses = travelExpenses;
+    }
+
+    @Override
+    public String toString() {
+        return "Delegate " +
+                "name: " + name + '\'' +
+                "EGN: " + EGN + '\'' +
+                "hometown: " + hometown + '\'' +
+                "travelExpenses: " + travelExpenses;
+    }
+}
+
+
+
+
+
+
+
+
+import java.util.Date;
+
+public class DelegationCard {
+    private String delegateNumber;
+    private Date arrivalDate;
+    private Date departureDate;
+
+    public DelegationCard(String delegateNumber, Date arrivalDate, Date departureDate) {
+        this.delegateNumber = delegateNumber;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
+    }
+
+    public String getDelegateNumber() {
+        return delegateNumber;
+    }
+
+    public void setDelegateNumber(String delegateNumber) {
+        this.delegateNumber = delegateNumber;
+    }
+
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public Date getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    @Override
+    public String toString() {
+        return "DelegationCard " +
+                "delegateNumber: " + delegateNumber + '\'' +
+                "arrivalDate: " + arrivalDate +
+                "departureDate: " + departureDate;
+    }
+}
+
+
+
+
+
+
+
+
+
+ public class Hotel {
+        private String name;
+        private int roomNumber;
+        private double roomPrice;
+
+        public Hotel(String name, int roomNumber, double roomPrice) {
+            this.name = name;
+            this.roomNumber = roomNumber;
+            this.roomPrice = roomPrice;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getRoomNumber() {
+            return roomNumber;
+        }
+
+        public void setRoomNumber(int roomNumber) {
+            this.roomNumber = roomNumber;
+        }
+
+        public double getRoomPrice() {
+            return roomPrice;
+        }
+
+        public void setRoomPrice(double roomPrice) {
+            this.roomPrice = roomPrice;
+        }
+
+     @Override
+     public String toString() {
+         return "Hotel: " +
+                 "name: " + name + '\'' +
+                 "roomNumber: " + roomNumber +
+                 "roomPrice: " + roomPrice;
+     }
+ }
+
+
+
+
+
+
+
+
+
+
+import javax.xml.crypto.Data;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Conference conference = new Conference();
+
+        boolean running = true;
+        while (running) {
+            System.out.println("1. Add delegate, hotel data and delegate card");
+            System.out.println("2. Print all delegate and hotel data");
+            System.out.println("3. Get total hotel expenses for delegates from a specific city");
+            System.out.println("4. Get the earliest arrived male delegate and his hotel information");
+            System.out.println("5. Get delegates from a specific city");
+            System.out.println("6. Get delegate information by room number");
+            System.out.println("7. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter delegate name: ");
+                    String name = sc.next();
+                    System.out.print("Enter EGN: ");
+                    String egn = sc.next();
+                    System.out.print("Enter city: ");
+                    String city = sc.next();
+                    System.out.print("Enter travel expenses: ");
+                    double travelExpenses = sc.nextDouble();
+                    System.out.print("Enter hotel name: ");
+                    String hotelName = sc.next();
+                    System.out.print("Enter room number: ");
+                    int roomNumber = sc.nextInt();
+                    System.out.print("Enter night rate: ");
+                    double nightRate = sc.nextDouble();
+                    System.out.print("Enter delegate card number: ");
+                    String delegateNumber = sc.next();
+                    System.out.print("Enter arrival data: ");
+                    String arrivalData = sc.next();
+                    System.out.print("Enter departure date: ");
+                    String departureDate = sc.next();
+                    conference.addDelegate(new Delegate(name, egn, city, travelExpenses), new Hotel(hotelName, roomNumber, nightRate), new DelegationCard(delegateNumber, arrivalData,departureDate));
+                    break;
+                case 2:
+                    conference.printAllData();
+                    break;
+                case 3:
+                    System.out.print("Enter city: ");
+                    city = sc.next();
+                    System.out.println("Total hotel expenses for delegates from " + city + ": " + conference.calculateTotalHotelExpenses(city));
+                    break;
+                case 4:
+                    Delegate earliestArrivedMaleDelegate = conference.getEarliestArrivalDelegateData();
+                    if (earliestArrivedMaleDelegate != null) {
+                        System.out.println("Name: " + earliestArrivedMaleDelegate.getName());
+                        System.out.println("EGN: " + earliestArrivedMaleDelegate.getEGN());
+                        System.out.println("Hotel: " + earliestArrivedMaleDelegate.getHotel().getName());
+                        System.out.println("Room number: " + earliestArrivedMaleDelegate.getHotel().getRoomNumber());
+                        System.out.println("Night rate: " + earliestArrivedMaleDelegate.getHotel().getNightRate());
+                    } else {
+                        System.out.println("No male delegate found!");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Enter city: ");
+                    city = sc.next();
+                    for (Delegate d : conference.getDelegatesFromCity(city)) {
+                        System.out.println("Name: " + d.getName());
+                        System.out.println("EGN: " + d.getEGN());
+                        System.out.println("City: " + d.getHometown());
+                        System.out.println("Travel Expenses: " + d.getTravelExpenses());
+                    }
+                    break;
+                case 6:
+                    System.out.print("Enter room number: ");
+                    roomNumber = sc.nextInt();
+                    Delegate delegate = conference.getDelegateDataByRoomNumber(roomNumber);
+                    if (delegate != null) {
+                        System.out.println("Name: " + delegate.getName());
+                        System.out.println("EGN: " + delegate.getEGN());
+                        System.out.println("City: " + delegate.getHometown());
+                        System.out.println("Travel Expenses: " + delegate.getTravelExpenses());
+                    } else {
+                        System.out.println("No delegate found for that room number!");
+                    }
+                    break;
+                case 7:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+        sc.close();
+    }
+}

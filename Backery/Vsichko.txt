@@ -1,0 +1,416 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Bakery {
+    private List<PastryBaker> pastryBakers;
+
+    public Bakery() {
+        pastryBakers = new ArrayList<>();
+    }
+
+    public void addPastryBaker(PastryBaker pastryBaker) {
+        pastryBakers.add(pastryBaker);
+    }
+
+    public List<PastryBaker> getAllPastries() {
+        return pastryBakers;
+    }
+
+    public List<PastryBaker> getPastriesByBakerId(int bakerId) {
+        List<PastryBaker> pastriesByBakerId = new ArrayList<>();
+        for (PastryBaker pastryBaker : pastryBakers) {
+            if (pastryBaker.getBaker().getBakerId() == bakerId) {
+                pastriesByBakerId.add(pastryBaker);
+            }
+        }
+        return pastriesByBakerId;
+    }
+
+    public void addPastryToBaker(Pastry pastry, Baker baker) {
+        PastryBaker pastryBaker = new PastryBaker(pastry, baker);
+        pastryBakers.add(pastryBaker);
+    }
+
+    public void removePastryFromBaker(int pastryId, int bakerId) {
+        PastryBaker pastryToRemove = null;
+        for (PastryBaker pastryBaker : pastryBakers) {
+            if (pastryBaker.getPastry().getPastryId() == pastryId && pastryBaker.getBaker().getBakerId() == bakerId) {
+                pastryToRemove = pastryBaker;
+                break;
+            }
+        }
+        if (pastryToRemove != null) {
+            pastryBakers.remove(pastryToRemove);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+class Baker {
+    private int bakerId;
+    private String bakerCompanyName;
+    private String bakerCountry;
+    private String bakerWorkTime;
+
+    public Baker(int bakerId, String bakerCompanyName, String bakerCountry, String bakerWorkTime) {
+        this.bakerId = bakerId;
+        this.bakerCompanyName = bakerCompanyName;
+        this.bakerCountry = bakerCountry;
+        this.bakerWorkTime = bakerWorkTime;
+    }
+
+    public int getBakerId() {
+        return bakerId;
+    }
+
+    public void setBakerId(int bakerId) {
+        this.bakerId = bakerId;
+    }
+
+    public String getBakerCompanyName() {
+        return bakerCompanyName;
+    }
+
+    public void setBakerCompanyName(String bakerCompanyName) {
+        this.bakerCompanyName = bakerCompanyName;
+    }
+
+    public String getBakerCountry() {
+        return bakerCountry;
+    }
+
+    public void setBakerCountry(String bakerCountry) {
+        this.bakerCountry = bakerCountry;
+    }
+
+    public String getBakerWorkTime() {
+        return bakerWorkTime;
+    }
+
+    public void setBakerWorkTime(String bakerWorkTime) {
+        this.bakerWorkTime = bakerWorkTime;
+    }
+
+    public void displayBakerInfo() {
+        System.out.println("Baker ID: " + bakerId);
+        System.out.println("Baker Company Name: " + bakerCompanyName);
+        System.out.println("Baker Country: " + bakerCountry);
+        System.out.println("Baker Work Time: " + bakerWorkTime);
+    }
+}
+
+
+
+
+
+
+
+class Cake {
+    private String cakeCrust;
+    private boolean cakeMultipleLayers;
+
+    public Cake(String cakeCrust, boolean cakeMultipleLayers) {
+        this.cakeCrust = cakeCrust;
+        this.cakeMultipleLayers = cakeMultipleLayers;
+    }
+
+    public String getCakeCrust() {
+        return cakeCrust;
+    }
+
+    public void setCakeCrust(String cakeCrust) {
+        this.cakeCrust = cakeCrust;
+    }
+
+    public boolean isCakeMultipleLayers() {
+        return cakeMultipleLayers;
+    }
+
+    public void setCakeMultipleLayers(boolean cakeMultipleLayers) {
+        this.cakeMultipleLayers = cakeMultipleLayers;
+    }
+
+    public void displayCakeInfo() {
+        System.out.println("Cake Crust: " + cakeCrust);
+        System.out.println("Cake Multiple Layers: " + cakeMultipleLayers);
+    }
+}
+
+
+
+
+
+
+
+
+
+class Cookie {
+    private boolean cookieHasChocolateChips;
+    private String cookieTexture;
+
+    public Cookie(boolean cookieHasChocolateChips, String cookieTexture) {
+        this.cookieHasChocolateChips = cookieHasChocolateChips;
+        this.cookieTexture = cookieTexture;
+    }
+
+    public boolean isCookieHasChocolateChips() {
+        return cookieHasChocolateChips;
+    }
+
+    public void setCookieHasChocolateChips(boolean cookieHasChocolateChips) {
+        this.cookieHasChocolateChips = cookieHasChocolateChips;
+    }
+
+    public String getCookieTexture() {
+        return cookieTexture;
+    }
+
+    public void setCookieTexture(String cookieTexture) {
+        this.cookieTexture = cookieTexture;
+    }
+
+    public void displayCookieInfo() {
+        System.out.println("Cookie Has Chocolate Chips: " + cookieHasChocolateChips);
+        System.out.println("Cookie Texture: " + cookieTexture);
+    }
+}
+
+
+
+
+
+
+
+
+
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Bakery bakery = new Bakery();
+        Scanner scanner = new Scanner(System.in);
+
+        int choice = 0;
+        while (choice != 6) {
+            displayMenu();
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    addPastryToBaker(bakery, scanner);
+                    break;
+                case 2:
+                    displayAllPastries(bakery);
+                    break;
+                case 3:
+                    displayPastriesByBakerId(bakery, scanner);
+                    break;
+                case 4:
+                    removePastryFromBaker(bakery, scanner);
+                    break;
+                case 5:
+                    displayAllPastries(bakery);
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void displayMenu() {
+        System.out.println("Menu:");
+        System.out.println("1. Add Pastry to Baker");
+        System.out.println("2. Display All Pastries");
+        System.out.println("3. Display Pastries by Baker ID");
+        System.out.println("4. Remove Pastry from Baker");
+        System.out.println("5. Display All Pastries");
+        System.out.println("6. Exit");
+    }
+
+    private static void addPastryToBaker(Bakery bakery, Scanner scanner) {
+        System.out.print("Enter Pastry ID: ");
+        int pastryId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter Pastry Name: ");
+        String pastryName = scanner.nextLine();
+
+        System.out.print("Enter Pastry Frosting: ");
+        String pastryFrosting = scanner.nextLine();
+
+        System.out.print("Enter Pastry Weight: ");
+        double pastryWeight = scanner.nextDouble();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter Baker ID: ");
+        int bakerId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter Baker Company Name: ");
+        String bakerCompanyName = scanner.nextLine();
+
+        System.out.print("Enter Baker Country: ");
+        String bakerCountry = scanner.nextLine();
+
+        System.out.print("Enter Baker Work Time: ");
+        String bakerWorkTime = scanner.nextLine();
+
+        Pastry pastry = new Pastry(pastryId, pastryName, pastryFrosting, pastryWeight);
+        Baker baker = new Baker(bakerId, bakerCompanyName, bakerCountry, bakerWorkTime);
+
+        bakery.addPastryToBaker(pastry, baker);
+        System.out.println("Pastry added to Baker successfully.");
+    }
+
+    private static void displayAllPastries(Bakery bakery) {
+        System.out.println("All Pastries:");
+        List<PastryBaker> allPastries = bakery.getAllPastries();
+        for (PastryBaker pastryBaker : allPastries) {
+            pastryBaker.displayPastryBakerInfo();
+        }
+    }
+
+    private static void displayPastriesByBakerId(Bakery bakery, Scanner scanner) {
+        System.out.print("Enter Baker ID: ");
+        int bakerId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.println("Pastries by Baker ID " + bakerId + ":");
+        List<PastryBaker> pastriesByBakerId = bakery.getPastriesByBakerId(bakerId);
+        for (PastryBaker pastryBaker : pastriesByBakerId) {
+            pastryBaker.displayPastryBakerInfo();
+        }
+    }
+
+    private static void removePastryFromBaker(Bakery bakery, Scanner scanner) {
+        System.out.print("Enter Pastry ID: ");
+        int pastryId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter Baker ID: ");
+        int bakerId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        bakery.removePastryFromBaker(pastryId, bakerId);
+        System.out.println("Pastry removed from Baker successfully.");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Pastry {
+    private int pastryId;
+    private String pastryName;
+    private String pastryFrosting;
+    private double pastryWeight;
+
+    public Pastry(int pastryId, String pastryName, String pastryFrosting, double pastryWeight) {
+        this.pastryId = pastryId;
+        this.pastryName = pastryName;
+        this.pastryFrosting = pastryFrosting;
+        this.pastryWeight = pastryWeight;
+    }
+
+    public int getPastryId() {
+        return pastryId;
+    }
+
+    public void setPastryId(int pastryId) {
+        this.pastryId = pastryId;
+    }
+
+    public String getPastryName() {
+        return pastryName;
+    }
+
+    public void setPastryName(String pastryName) {
+        this.pastryName = pastryName;
+    }
+
+    public String getPastryFrosting() {
+        return pastryFrosting;
+    }
+
+    public void setPastryFrosting(String pastryFrosting) {
+        this.pastryFrosting = pastryFrosting;
+    }
+
+    public double getPastryWeight() {
+        return pastryWeight;
+    }
+
+    public void setPastryWeight(double pastryWeight) {
+        this.pastryWeight = pastryWeight;
+    }
+
+    public void displayPastryInfo() {
+        System.out.println("Pastry ID: " + pastryId);
+        System.out.println("Pastry Name: " + pastryName);
+        System.out.println("Pastry Frosting: " + pastryFrosting);
+        System.out.println("Pastry Weight: " + pastryWeight);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+class PastryBaker {
+    private Pastry pastry;
+    private Baker baker;
+
+    public PastryBaker(Pastry pastry, Baker baker) {
+        this.pastry = pastry;
+        this.baker = baker;
+    }
+
+    public Pastry getPastry() {
+        return pastry;
+    }
+
+    public void setPastry(Pastry pastry) {
+        this.pastry = pastry;
+    }
+
+    public Baker getBaker() {
+        return baker;
+    }
+
+    public void setBaker(Baker baker) {
+        this.baker = baker;
+    }
+
+    public void displayPastryBakerInfo() {
+        System.out.println("Pastry Information:");
+        pastry.displayPastryInfo();
+        System.out.println("Baker Information:");
+        baker.displayBakerInfo();
+    }
+}
